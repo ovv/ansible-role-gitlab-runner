@@ -1,0 +1,36 @@
+---
+
+- name: Requirements
+  apt:
+    pkg: "{{ item }}"
+    state: latest
+  with_items:
+    - curl
+    - gnupg
+    - debian-archive-keyring
+    - apt-transport-https
+    - ca-certificates
+
+- name: Gitlab apt key
+  apt_key:
+    url: https://packages.gitlab.com/runner/gitlab-runner/gpgkey
+
+- name: Gitlab apt repository
+  apt_repository:
+    repo: "deb https://packages.gitlab.com/runner/gitlab-runner/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} main"
+    update_cache: yes
+    state: present
+
+- name: Prefer gitlab pacakges over debian
+  copy:
+    dest: /etc/apt/preferences.d/pin-gitlab-runner.pref
+    content: |
+      Explanation: Prefer GitLab provided packages over the Debian native ones
+      Package: gitlab-runner
+      Pin: origin packages.gitlab.com
+      Pin-Priority: 1001
+
+- name: Install runner
+  apt:
+    pkg: gitlab-runner
+    state: latest
