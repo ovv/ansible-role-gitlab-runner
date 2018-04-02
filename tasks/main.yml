@@ -14,6 +14,7 @@
 - name: Gitlab apt key
   apt_key:
     url: https://packages.gitlab.com/runner/gitlab-runner/gpgkey
+  register: runner_first_run
 
 - name: Gitlab apt repository
   apt_repository:
