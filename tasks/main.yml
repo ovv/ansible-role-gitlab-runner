@@ -8,7 +8,7 @@
         - debian-archive-keyring
         - apt-transport-https
         - ca-certificates
-    state: latest
+    state: present
 
 - name: Gitlab apt key
   apt_key:
@@ -33,4 +33,4 @@
 - name: Install runner
   apt:
     pkg: gitlab-runner
-    state: latest
+    state: present
